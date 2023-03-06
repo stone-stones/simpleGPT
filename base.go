@@ -78,8 +78,8 @@ func (s *Client) getMessages(maxToken int) []*ChatMsg {
 
 	for i := len(s.preMessage) - 1; i >= 0; i-- {
 		msg := s.preMessage[i]
-		runeCount := len([]rune(msg.Content)) + len([]rune(msg.Role))
-		if totalRune+runeCount > maxToken {
+		runeCount := len([]byte(msg.Content)) + len([]byte(msg.Role))
+		if totalRune+runeCount > maxToken*4 { //1 token = 4 characters
 			break
 		}
 		totalRune += runeCount
