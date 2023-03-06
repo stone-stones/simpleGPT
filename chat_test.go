@@ -60,7 +60,7 @@ func TestChatClient_NewClient(t *testing.T) {
 		So(err, ShouldBeNil)
 		So(resp, ShouldEqual, mockResp)
 		So(cli.stream, ShouldEqual, false)
-		So(cli.preMessage, ShouldResemble, []ChatMsg{{RoleUser, "hello"}, {RoleAssistant, mockResp}})
+		So(cli.preMessage, ShouldResemble, []*ChatMsg{{RoleUser, "hello"}, {RoleAssistant, mockResp}})
 	})
 }
 

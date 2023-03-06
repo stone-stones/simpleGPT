@@ -53,7 +53,7 @@ func TestChatClient_SendStreamMsg(t *testing.T) {
 		So(err, ShouldBeNil)
 		So(resp, ShouldContainSubstring, mockRes)
 		So(cli.stream, ShouldEqual, true)
-		So(cli.preMessage, ShouldResemble, []ChatMsg{{RoleUser, "hello"}, {RoleAssistant, " " + mockRes}})
+		So(cli.preMessage, ShouldResemble, []*ChatMsg{{RoleUser, "hello"}, {RoleAssistant, " " + mockRes}})
 	})
 	Convey("test NewClient SendStreamMsg fail", t, func() {
 		patch := gomonkey.ApplyMethodFunc(http.DefaultClient, "Do", func(req *http.Request) (*http.Response, error) {

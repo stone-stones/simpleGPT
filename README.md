@@ -11,6 +11,11 @@ Installation:
 go get github.com/stone-stones/simpleGPT
 ```
 
+Run Test:
+```
+go test -gcflags all=-l
+```
+
 
 ChatGPT example usage:
 
