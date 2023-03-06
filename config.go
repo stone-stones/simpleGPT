@@ -30,7 +30,7 @@ func GetConfig() ChatConfig {
 //PostParams is a struct that contains the parameters to be sent to the OpenAI API.
 type PostParams struct {
 	Model            string         `json:"model"`
-	Message          []ChatMsg      `json:"messages"`
+	Message          []*ChatMsg      `json:"messages"`
 	MaxTokens        int            `json:"max_tokens,omitempty"`
 	Temperature      float32        `json:"temperature,omitempty"`
 	TopP             float32        `json:"top_p,omitempty"`
@@ -67,6 +67,20 @@ func LoadConfigFromFile(path string, log Logger) error {
 		(defaultConfig.PostParams.Model != DefaultModelName &&
 			defaultConfig.PostParams.Model != validModelName) {
 		err = errors.New("model name or token not valid")
+		log.Error(err.Error())
+		return err
+	}
+	defaultConfig.isInit = true
+	return nil
+}
+
+//SetConfig set configuration
+func SetConfig(conf ChatConfig,log Logger) error {
+	defaultConfig = conf
+	if defaultConfig.Token == "" ||
+		(defaultConfig.PostParams.Model != DefaultModelName &&
+			defaultConfig.PostParams.Model != validModelName) {
+		err := errors.New("model name or token not valid")
 		log.Error(err.Error())
 		return err
 	}

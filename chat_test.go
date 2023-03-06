@@ -74,3 +74,20 @@ func TestChatClient_LoadFromConfig(t *testing.T) {
 	})
 
 }
+
+
+func TestChatClient_getMessages(t *testing.T) {
+	Convey("TestChatClient_LoadFromConfig", t, func() {
+		c,err  := NewClient("mock token")
+		So(err,ShouldBeNil)
+		c.appendMessages(&ChatMsg{Content: "this is mock content",Role: "user"})
+		c.appendMessages(&ChatMsg{Content: "this is mock content",Role: "user"})
+		c.appendMessages(&ChatMsg{Content: "this is mock content",Role: "user"})
+		c.appendMessages(&ChatMsg{Content: "this is mock content",Role: "user"})
+		c.appendMessages(&ChatMsg{Content: "this is mock content",Role: "user"})
+		c.appendMessages(&ChatMsg{Content: "this is mock content",Role: "user"})
+		c.getMessages(100)
+		So(len(c.preMessage),ShouldEqual,4)
+	})
+
+}

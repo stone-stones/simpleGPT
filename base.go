@@ -15,10 +15,7 @@ func (s *Client) getPostParams() ([]byte, error) {
 		params.Stream = true
 	}
 
-	// Get the preMessage list and lock it to prevent race conditions
-	s.mutex.Lock()
-	params.Message = s.preMessage
-	s.mutex.Unlock()
+	params.Message = s.getMessages(params.MaxTokens)
 
 	// Set the User parameter if it's not empty
 	if s.User != "" {
@@ -45,7 +42,7 @@ func (s *Client) CutPreMessages(remain int) {
 // getReq returns an http.Request object to send to the server
 func (s *Client) getReq(msg string) (*http.Request, error) {
 	// Append the user's message to the preMessage list
-	s.appendMessages(ChatMsg{Role: RoleUser, Content: msg})
+	s.appendMessages(&ChatMsg{Role: RoleUser, Content: msg})
 
 	// Get the post parameters and return an http.Request object
 	c, err := s.getPostParams()
@@ -64,11 +61,34 @@ func (s *Client) getReq(msg string) (*http.Request, error) {
 }
 
 // appendMessages appends one or more messages to the preMessage list
-func (s *Client) appendMessages(msg ...ChatMsg) {
+func (s *Client) appendMessages(msg ...*ChatMsg) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 	s.preMessage = append(s.preMessage, msg...)
 }
+
+// getMessages gets the messages for params
+func (s *Client) getMessages(maxToken int) []*ChatMsg {
+	// Get the preMessage list and lock it to prevent race conditions
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	var totalRune int
+	var messages []*ChatMsg
+
+	for i := len(s.preMessage) - 1; i >= 0; i-- {
+		msg := s.preMessage[i]
+		runeCount := len([]rune(msg.Content)) + len([]rune(msg.Role))
+		if totalRune+runeCount > maxToken {
+			break
+		}
+		totalRune += runeCount
+		messages = append([]*ChatMsg{msg}, messages...)
+	}
+	s.preMessage = messages
+	return messages
+}
+
 
 // handError handles an http response with an error status code
 func (s *Client) handError(resp *http.Response) error {

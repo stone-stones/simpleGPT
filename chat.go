@@ -16,7 +16,7 @@ type Client struct {
 	MaxPreMessage int             // MaxPreMessage represents the maximum number of messages that can be stored in preMessage
 	CreateTime    int64           // CreateTime represents the time the client was created
 	LastConnTime  int64           // LastConnTime represents the time the client last connected to the server
-	preMessage    []ChatMsg       // preMessage is a slice containing previously sent messages
+	preMessage    []*ChatMsg       // preMessage is a slice containing previously sent messages
 	Ctx           context.Context // Ctx represents the context for the client
 	mutex         *sync.Mutex     // mutex is a mutex used to synchronize access to the client
 	Log           Logger          // Log represents the logger used for logging
@@ -109,7 +109,7 @@ func (s *Client) SendMsg(msg string) (string, error) {
 		s.Log.Error("Decode error:%v,originInfo:%s", err, resp.Body)
 		return "", err
 	}
-	s.appendMessages(ChatMsg{Role: RoleAssistant, Content: result.Choices[0].Messages.Content})
+	s.appendMessages(&ChatMsg{Role: RoleAssistant, Content: result.Choices[0].Messages.Content})
 
 	// Return the response message and no error
 	return result.Choices[0].Messages.Content, nil

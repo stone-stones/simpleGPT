@@ -85,7 +85,7 @@ func (s *Client) recv(recvCh <-chan string) (string, error) {
 	var builder strings.Builder
 	for c := range recvCh {
 		if c == StreamEndSign {
-			s.appendMessages(ChatMsg{Role: RoleAssistant, Content: builder.String()})
+			s.appendMessages(&ChatMsg{Role: RoleAssistant, Content: builder.String()})
 			return strings.TrimSpace(builder.String()), nil
 		}
 		builder.WriteString(c)
