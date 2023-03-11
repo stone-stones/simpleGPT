@@ -6,10 +6,10 @@ import (
 
 // Logger is an interface that defines logging methods
 type Logger interface {
-	Debug(val ...interface{}) error
-	Info(val ...interface{}) error
-	Warn( val ...interface{}) error
-	Error(val ...interface{}) error
+	Debug(val ...interface{})
+	Info(val ...interface{})
+	Warn( val ...interface{})
+	Error(val ...interface{})
 }
 
 // GLog is a global variable that holds a DefaultLog instance
@@ -32,31 +32,27 @@ func getMsg(val ...interface{})(string ,[]interface{}) {
 
 }
 // Debug logs a debug message with optional values
-func (l *DefaultLog) Debug(val ...interface{}) error {
+func (l *DefaultLog) Debug(val ...interface{})  {
 	msg,params := getMsg(val...)
 	l.Log.Printf(msg, params...)
-	return nil
 }
 
 // Info logs an informational message with optional values
-func (l *DefaultLog) Info(val ...interface{}) error {
+func (l *DefaultLog) Info(val ...interface{})  {
 	msg,params := getMsg(val...)
 	l.Log.Printf(msg,params...)
-	return nil
 }
 
 // Warn logs a warning message with optional values
-func (l *DefaultLog) Warn( val ...interface{}) error {
+func (l *DefaultLog) Warn( val ...interface{})  {
 	msg,params := getMsg(val...)
 	l.Log.Printf(msg,params...)
-	return nil
 }
 
 // Error logs an error message with optional values and returns an error
-func (l *DefaultLog) Error(val ...interface{}) error {
+func (l *DefaultLog) Error(val ...interface{})  {
 	msg,params := getMsg(val...)
 	l.Log.Fatalf(msg, params...)
-	return nil
 }
 
 // GetLogger returns a pointer to a DefaultLog instance
