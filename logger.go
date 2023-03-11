@@ -52,7 +52,7 @@ func (l *DefaultLog) Warn( val ...interface{})  {
 // Error logs an error message with optional values and returns an error
 func (l *DefaultLog) Error(val ...interface{})  {
 	msg,params := getMsg(val...)
-	l.Log.Fatalf(msg, params...)
+	l.Log.Printf(msg, params...)
 }
 
 // GetLogger returns a pointer to a DefaultLog instance
