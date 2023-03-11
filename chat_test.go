@@ -86,7 +86,7 @@ func TestChatClient_getMessages(t *testing.T) {
 		c.appendMessages(&ChatMsg{Content: "this is mock content",Role: "user"})
 		c.appendMessages(&ChatMsg{Content: "this is mock content",Role: "user"})
 		c.appendMessages(&ChatMsg{Content: "this is mock content",Role: "user"})
-		c.getMessages(100)
+		c.getMessages(25)
 		So(len(c.preMessage),ShouldEqual,4)
 	})
 
